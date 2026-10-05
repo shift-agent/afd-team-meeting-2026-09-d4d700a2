@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex, nofollow">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AFD Team Meeting, September 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#152238; --navy-2:#1e3350; --green:#6a9f3f; --green-d:#4d7a2e;
+    --gold:#d9a441; --ink:#1d2530; --muted:#5c6773; --line:#e5e8ec; --bg:#f4f6f8;
+    --red:#c65a4e; --orange:#e6842a; --blue:#3a9fd4;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  html,body{height:100%}
+  body{font-family:'Montserrat',-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    color:var(--ink); background:var(--navy); overflow:hidden}
+  .stage{position:fixed; inset:0}
+  .slide{position:absolute; inset:0; display:none; flex-direction:column;
+    align-items:center; justify-content:center; padding:4.5vh 6vw 8vh; text-align:center;
+    background:#fff; opacity:0; transition:opacity .25s ease}
+  .slide.active{display:flex; opacity:1}
+  .slide.dark{background:var(--navy); color:#fff}
+  .kicker{font-size:1rem; letter-spacing:.18em; text-transform:uppercase;
+    color:var(--green); font-weight:700; margin-bottom:1rem}
+  .dark .kicker{color:var(--gold)}
+  h1{font-size:clamp(2.2rem,5.4vw,4.2rem); line-height:1.03; font-weight:800; letter-spacing:-.01em}
+  h2{font-size:clamp(1.7rem,3.8vw,2.9rem); line-height:1.06; font-weight:800; letter-spacing:-.01em}
+  .sub{font-size:clamp(1rem,2vw,1.4rem); color:var(--muted); margin-top:1rem; max-width:62ch}
+  .dark .sub{color:#b9c4d2}
+  .logo{height:66px; margin-bottom:1.8rem}
+  .logo-sm{height:30px; position:fixed; left:26px; bottom:20px; opacity:.85; z-index:15}
+  .pill{display:inline-block; background:rgba(106,159,63,.12); color:var(--green-d);
+    font-weight:700; padding:.35em .95em; border-radius:999px; font-size:.95rem; margin-top:1.3rem}
+  .dark .pill{background:rgba(217,164,65,.16); color:var(--gold)}
+  .tag{display:inline-block; font-size:.7rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase;
+    padding:.2em .6em; border-radius:4px; vertical-align:middle}
+  .tag.draft{background:rgba(217,164,65,.2); color:var(--green-d)}
+  /* two-column teach+QR */
+  .qwrap{display:flex; gap:clamp(1.6rem,4vw,4rem); align-items:center; justify-content:center;
+    margin-top:1.6rem; width:100%; max-width:1180px; flex-wrap:wrap}
+  .qcard{background:#fff; border:1px solid var(--line); padding:16px; box-shadow:0 10px 34px rgba(21,34,56,.12)}
+  .qcard img{display:block; width:clamp(180px,20vw,250px); height:auto}
+  .qcap{margin-top:.6rem; font-size:.85rem; color:var(--muted); font-weight:600}
+  .steps{text-align:left; max-width:36ch}
+  .steps li{list-style:none; font-size:clamp(1rem,1.85vw,1.35rem); line-height:1.45;
+    padding-left:2.3rem; position:relative; margin:.75rem 0; color:var(--ink)}
+  .steps li b{color:var(--navy)}
+  .steps li::before{counter-increment:st; content:counter(st);
+    position:absolute; left:0; top:.05em; width:1.6rem; height:1.6rem; border-radius:50%;
+    background:var(--green); color:#fff; font-size:.95rem; font-weight:800;
+    display:flex; align-items:center; justify-content:center}
+  ol.steps{counter-reset:st}
+  .dark .steps li{color:#eaf0f6}
+  .dark .steps li b{color:#fff}
+  .dark .steps li::before{background:var(--gold); color:var(--navy)}
+  .pw{font-family:ui-monospace,SFMono-Regular,Menlo,monospace; background:var(--navy);
+    color:#fff; padding:.5em .8em; display:inline-block; margin-top:.9rem; font-size:1rem}
+  .biglink{display:inline-block; margin-top:1.4rem; font-size:clamp(1.1rem,2.2vw,1.55rem); font-weight:800; color:#fff; background:var(--navy); text-decoration:none; padding:.7em 1.4em; border-radius:10px; box-shadow:0 10px 30px rgba(21,34,56,.18)}
+  .biglink:hover{background:var(--navy-2)}
+  .copybtn{border:none; cursor:pointer; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; transition:background .15s}
+  .copybtn:hover{background:var(--navy-2)}
+  /* rhythm + agenda */
+  .rhythm{display:flex; gap:1rem; margin-top:1.4rem; flex-wrap:wrap; justify-content:center}
+  .rhythm div{background:#fff; border:1px solid var(--line); padding:1rem 1.5rem; min-width:150px}
+  .dark .rhythm div{background:var(--navy-2); border-color:#2b4straight}
+  .rhythm .w{font-size:1.35rem; font-weight:800; letter-spacing:.04em}
+  .rhythm .a{color:var(--green)} .rhythm .s{color:var(--gold)} .rhythm .k{color:var(--navy)}
+  .dark .rhythm .k{color:#9fb6d6}
+  .rhythm small{display:block; color:var(--muted); margin-top:.25rem; font-weight:600}
+  .bigquote{margin-top:1.8rem; max-width:46ch; font-size:clamp(1.25rem,2.6vw,1.9rem); font-weight:700; font-style:italic; color:var(--green-d); line-height:1.35; border-top:2px solid var(--line); padding-top:1.4rem}
+  ol.agenda{counter-reset:ag; text-align:left; margin-top:1.4rem; max-width:880px; width:100%;
+    display:grid; grid-template-columns:1fr 1fr; gap:.5rem 2.4rem}
+  ol.agenda li{list-style:none; font-size:clamp(.98rem,1.7vw,1.25rem); padding:.55rem 0 .55rem 2.4rem;
+    position:relative; border-bottom:1px solid var(--line)}
+  .dark ol.agenda li{border-color:#2a3d57}
+  ol.agenda li::before{counter-increment:ag; content:counter(ag); position:absolute; left:0; top:.5rem;
+    width:1.7rem; height:1.7rem; background:var(--green); color:#fff; font-weight:800; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; font-size:.9rem}
+  /* app preview frame */
+  .appframe{width:clamp(320px,42vw,520px); border:1px solid var(--line); border-radius:10px;
+    overflow:hidden; box-shadow:0 16px 44px rgba(21,34,56,.16); background:#fff; text-align:left}
+  .shot{width:clamp(320px,44vw,560px); height:auto; border:1px solid var(--line); border-radius:10px;
+    box-shadow:0 16px 44px rgba(21,34,56,.16); display:block}
+  .shot.big{width:auto; max-width:clamp(360px,50vw,700px); max-height:60vh}
+  .phone{background:#12141a; border-radius:42px; padding:22px 13px 26px; box-shadow:0 28px 70px rgba(21,34,56,.34); position:relative; flex:0 0 auto}
+  .phone::before{content:'';position:absolute;top:9px;left:50%;transform:translateX(-50%);width:58px;height:5px;background:#2b2e37;border-radius:3px}
+  .phone::after{content:'';position:absolute;bottom:10px;left:50%;transform:translateX(-50%);width:96px;height:5px;background:#2b2e37;border-radius:3px}
+  .phone img{display:block;width:clamp(180px,21vw,250px);height:auto;border-radius:28px}
+  .sidebyside{display:flex; gap:clamp(1.5rem,4vw,3.5rem); align-items:center; justify-content:center; flex-wrap:wrap; margin-top:1.3rem; width:100%; max-width:1220px}
+  .fallback{display:none; width:clamp(360px,50vw,700px); min-height:280px; align-items:center; justify-content:center; border:2px dashed var(--line); border-radius:10px; color:var(--muted); padding:2rem; text-align:center; font-weight:600}
+  .profile-bg{overflow:hidden}
+  .profile-bg .bgimg{position:absolute; inset:0; background-image:url(assets/ask-profile-shot.png); background-size:cover; background-position:center 55%; opacity:.5; z-index:0}
+  .profile-bg > *:not(.bgimg){position:relative; z-index:1}
+  .pf-panel{background:rgba(255,255,255,.5); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border:1px solid rgba(255,255,255,.55); border-radius:18px; padding:2.4rem clamp(1.5rem,4vw,3.2rem); max-width:1060px; box-shadow:0 24px 70px rgba(21,34,56,.14)}
+  .rec-bg{overflow:hidden}
+  .rec-bg .rec-img{position:absolute; inset:0; background:linear-gradient(180deg, rgba(21,34,56,.5), rgba(21,34,56,.72)), url(assets/rec-center.jpg) center/cover; z-index:0}
+  .rec-bg > *:not(.rec-img){position:relative; z-index:1}
+  .appbar{background:var(--navy); color:#fff; padding:.6rem .9rem; font-size:.8rem; display:flex; gap:.4rem; align-items:center}
+  .appbar .dot{width:9px;height:9px;border-radius:50%;background:#4a5f7f}
+  .appbar b{margin-left:.4rem; font-weight:700}
+  .appbody{padding:1.1rem 1.2rem}
+  .prev-label{position:absolute; top:10px; right:12px; font-size:.65rem; font-weight:800; letter-spacing:.1em;
+    background:var(--gold); color:var(--navy); padding:.2em .6em; border-radius:4px}
+  .bars{display:flex; flex-direction:column; gap:.7rem; margin-top:.3rem}
+  .bar{display:flex; align-items:center; gap:.7rem; font-size:.9rem}
+  .bar .lab{width:130px; color:var(--ink); font-weight:600}
+  .track{flex:1; height:12px; background:#eef1f4; border-radius:6px; overflow:hidden}
+  .fill{display:block; height:100%; background:var(--green); border-radius:6px}
+  .fill.gold{background:var(--gold)} .fill.navy{background:var(--navy-2)}
+  .prow{display:flex; justify-content:space-between; padding:.5rem 0; border-bottom:1px solid var(--line); font-size:.92rem}
+  .prow:last-child{border:0}
+  .prow .pv{font-weight:700; color:var(--navy)}
+  .chips{display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.6rem}
+  .chip{font-size:.78rem; font-weight:700; padding:.25em .7em; border-radius:999px; background:#eef1f4; color:var(--muted)}
+  .chip.on{background:rgba(106,159,63,.15); color:var(--green-d)}
+  .chip.soon{background:rgba(217,164,65,.16); color:#8a6b1e}
+  /* scoreboard */
+  .board{display:grid; grid-template-columns:repeat(3,1fr); gap:1rem 1.2rem; margin-top:1.4rem;
+    width:100%; max-width:1000px}
+  .kpi{background:#fff; border:1px solid var(--line); border-top:4px solid var(--green); padding:1.1rem 1.2rem; text-align:left}
+  .kpi.warn{border-top-color:var(--gold)} .kpi.win{border-top-color:var(--green)} .kpi.miss{border-top-color:var(--red)}
+  .kpi .n{font-size:clamp(1.5rem,3vw,2.1rem); font-weight:800; color:var(--navy); line-height:1}
+  .kpi .l{font-size:.85rem; color:var(--muted); margin-top:.35rem; font-weight:600; text-transform:uppercase; letter-spacing:.04em}
+  .kpi .g{font-size:.85rem; margin-top:.5rem; font-weight:700}
+  .kpi .g.up{color:var(--green-d)} .kpi .g.dn{color:var(--red)} .kpi .g.mid{color:#8a6b1e}
+  .deptgrid{display:grid; grid-template-columns:1fr 1fr; gap:.5rem 2rem; margin-top:1.2rem; max-width:760px; width:100%}
+  .deptgrid .d{display:flex; justify-content:space-between; padding:.5rem 0; border-bottom:1px solid var(--line); font-size:1.05rem}
+  .deptgrid .d b{font-weight:800}
+  .g100{color:var(--green-d)} .g90{color:#8a6b1e} .g70{color:var(--red)}
+  .barchart{width:100%; max-width:800px; text-align:left; margin-top:1rem}
+  .bc-title{font-size:.88rem; font-weight:700; color:var(--navy); margin-bottom:.55rem}
+  .bc-row{display:flex; align-items:center; gap:.8rem; margin:.4rem 0; font-size:.95rem}
+  .bc-lab{width:145px; color:var(--ink); font-weight:600; text-align:right}
+  .bc-track{position:relative; flex:1; height:15px; background:#eef1f4; border-radius:8px}
+  .bc-fill{position:absolute; left:0; top:0; height:100%; background:var(--green); border-radius:8px}
+  .bc-fill.low{background:var(--red)}
+  .bc-goal{position:absolute; top:-4px; width:2px; height:23px; background:var(--navy); opacity:.5}
+  .bc-val{width:46px; font-weight:800; text-align:left}
+  .provcard{background:#fff; border:1px solid var(--line); border-top:4px solid var(--navy); padding:1.4rem 1.7rem; flex:1; min-width:280px; max-width:420px; text-align:left}
+  .provname{font-size:1.5rem; font-weight:800; color:var(--navy); margin-bottom:.7rem}
+  .provrow{display:flex; justify-content:space-between; align-items:baseline; padding:.6rem 0; border-bottom:1px solid var(--line); font-size:1.1rem}
+  .provrow:last-child{border:0}
+  .provrow span{color:var(--muted); font-weight:600}
+  .provrow b{font-weight:800; color:var(--navy); font-size:1.25rem}
+  .provrow b.pending{color:var(--muted); font-weight:600; font-style:italic; font-size:1rem}
+  .chart-t{font-weight:800; color:var(--navy); font-size:1rem; margin-bottom:.5rem; text-align:center}
+  .foot-note{font-size:.8rem; color:var(--muted); margin-top:1rem; max-width:70ch}
+  /* org chart */
+  .org{display:flex; flex-direction:column; align-items:center; gap:.8rem; margin-top:1.2rem}
+  .orgrow{display:flex; gap:1rem; justify-content:center; flex-wrap:wrap}
+  .node{background:#fff; border:1px solid var(--line); border-top:4px solid var(--navy); padding:.7rem 1.1rem; min-width:150px}
+  .node.lead{border-top-color:var(--gold)} .node.dept{border-top-color:var(--green)}
+  .node b{display:block; font-size:1.05rem; color:var(--navy)}
+  .node small{color:var(--muted); font-size:.82rem}
+  .connect{width:2px; height:16px; background:var(--line)}
+  /* chrome */
+  .bar-top{position:fixed; top:0; left:0; height:5px; background:var(--green); width:0; z-index:20; transition:width .25s}
+  .count{position:fixed; right:20px; top:14px; font-size:.82rem; color:var(--muted); z-index:20}
+  .nav{position:fixed; bottom:14px; right:18px; display:flex; gap:6px; z-index:20}
+  .nav button{border:none; background:rgba(120,140,170,.28); width:32px; height:28px; cursor:pointer; font-size:1rem; color:#fff; border-radius:4px}
+  .hint{position:fixed; left:50%; bottom:16px; transform:translateX(-50%); color:#8a97a6; font-size:.75rem; z-index:14}
+  @page{size:1280px 720px;margin:0}
+  @media print{
+    body{overflow:visible; background:#fff}
+    .slide{position:relative; display:flex !important; opacity:1 !important; page-break-after:always; break-after:page; height:100vh; min-height:100vh; overflow:hidden; border-bottom:0}
+    .slide:last-of-type{page-break-after:auto; break-after:auto}
+    .logo-sm,#reorderPanel{display:none !important}
+    html,body{height:auto}
+    .stage{position:static}
+    .slide{-webkit-print-color-adjust:exact; print-color-adjust:exact}
+    .bar-top,.count,.nav,.hint{display:none}
+  }
+    .tbd{display:inline-block;font-size:.72rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;background:rgba(198,90,78,.14);color:var(--red);padding:.25em .7em;border-radius:4px}
+  .confirm{background:rgba(198,90,78,.08);border:1px solid rgba(198,90,78,.4);border-radius:8px;padding:.6rem 1rem;margin-top:1rem;font-size:.9rem;color:var(--ink);max-width:980px;text-align:left}
+  .provcard.sm{min-width:170px;max-width:220px;padding:1rem 1.1rem;flex:1}
+  .provcard.sm .provname{font-size:1.2rem;margin-bottom:.4rem}
+  .provcard.sm .provrow{font-size:.85rem;padding:.4rem 0}
+  .provcard.sm .provrow b{font-size:1rem}
+  .rank-row{display:flex;align-items:center;gap:.9rem;margin:.55rem 0;text-align:left}
+  .rank-n{width:2rem;height:2rem;border-radius:50%;background:var(--green);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .rank-n.pend{background:#c9d0d8}
+  .rank-lab{width:15rem;font-weight:800;color:var(--navy);font-size:1.05rem;flex:0 0 auto}
+  .rank-lab small{display:block;font-weight:500;color:var(--muted);font-size:.74rem;line-height:1.25;margin-top:.1rem}
+  .rank-track{position:relative;flex:1;height:16px;background:#eef1f4;border-radius:8px}
+  .rank-fill{position:absolute;left:0;top:0;height:100%;background:var(--green);border-radius:8px}
+  .rank-val{width:9rem;font-weight:800;font-size:1.05rem;text-align:left}
+  .ph{border:2px dashed #c65a4e;background:rgba(198,90,78,.05);color:#c65a4e;font-weight:800;font-size:.9rem;letter-spacing:.04em;padding:.7rem 1rem;border-radius:8px;text-align:center;display:flex;align-items:center;justify-content:center;min-height:3rem}
+  .ph.box{min-height:9rem;font-size:1.05rem;flex:1}
+  .ph.sm{min-height:0;font-size:.7rem;padding:.35rem .5rem;margin-top:.4rem}
+  .dark .ph{color:#f0a89f;border-color:#f0a89f;background:rgba(240,168,159,.08)}
+  .ansline{margin-top:.6rem;font-weight:800;color:var(--red);font-size:.95rem}
+  @media(max-width:760px){ ol.agenda,.deptgrid{grid-template-columns:1fr} .board{grid-template-columns:1fr 1fr} }
+</style>
+</head>
+<body>
+<div class="bar-top" id="bar"></div>
+<div class="count" id="count">1 / 18</div>
+
+<div class="stage">
+
+  <!-- 1 · TITLE -->
+  <section class="slide dark active">
+    <img class="logo" src="assets/ask-logo-color.png" alt="ASK System">
+    <div class="kicker">Atlantic Family Dental · Team Meeting</div>
+    <h1>One Team.<br>One Passion.<br>One Path to Success.</h1>
+    <p class="sub">One rhythm to grow, check in, and see how we're doing, together.</p>
+    <div style="margin-top:1.4rem;font-weight:800;font-size:1.1rem;letter-spacing:.02em"><span style="color:var(--orange)">Align</span> · <span style="color:var(--blue)">Shift</span> · <span style="color:var(--green)">Keep</span></div>
+  </section>
+
+  <!-- 2 · AGENDA -->
+  <section class="slide">
+    <div class="kicker">Today</div>
+    <h2>Our agenda</h2>
+    <ol class="agenda">
+      <li>Team check-in, welcome new staff</li>
+      <li>Team department updates</li>
+      <li>What the team told us in this month's check-in</li>
+      <li>The ASK Profile, and teeing up Thursday</li>
+      <li>Last month's numbers &amp; goals ahead</li>
+      <li>Celebrations, wins &amp; next steps</li>
+    </ol>
+    <div style="margin-top:1.4rem;font-weight:800;font-size:1.1rem;letter-spacing:.02em"><span style="color:var(--orange)">Align</span> attitude · <span style="color:var(--blue)">Shift</span> actions · <span style="color:var(--green)">Keep</span> results</div>
+  </section>
+
+  <!-- 2b · ALIGN -->
+  <section class="slide">
+    <div class="kicker" style="color:var(--orange)">ALIGN · Why we're here</div>
+    <h2 style="color:var(--orange)">Caring · Curiosity · Coachability</h2>
+    <div class="rhythm" style="margin-top:1.4rem">
+      <div><div class="w a">Caring</div><small>for our patients &amp; each other</small></div>
+      <div><div class="w s">Curiosity</div><small>ask, learn, get better</small></div>
+      <div><div class="w k">Coachability</div><small>turn feedback into action</small></div>
+    </div>
+    <p class="sub" style="margin-top:1.6rem">Our focus never changes: <b style="color:var(--navy)">standards of care</b> and a <b style="color:var(--navy)">consistent patient experience</b>.</p>
+    <div class="bigquote">“Every patient gets the opportunity to experience the best of what AFD has to offer, every time.”</div>
+  </section>
+
+  <!-- 4 · CHECK-IN / NEW STAFF -->
+  <section class="slide dark">
+    <div class="kicker">Team check-in</div>
+    <h2>Welcome</h2>
+    <p class="sub">Quick round, how's everyone doing? Then let's talk as a team.</p>
+    <div style="margin-top:1.5rem; border-top:2px solid rgba(255,255,255,.14); padding-top:1.3rem; max-width:56ch; text-align:left">
+      <div style="font-size:.78rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:.9rem">This month's questions</div>
+      <ol class="steps">
+        <li>Think of a time this month you assumed you knew why someone did something. What happened when you checked?</li>
+        <li>What is one thing at work you have been guessing about that you could simply ask?</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 5 · DEPARTMENT UPDATES -->
+  <section class="slide">
+    <div class="kicker">Department snapshots</div>
+    <h2>Each team, a quick update</h2>
+    <div class="deptgrid" style="max-width:760px">
+      <div class="d"><span>Front Desk</span><b class="g100">2 min</b></div>
+      <div class="d"><span>Hygiene</span><b class="g100">2 min</b></div>
+      <div class="d"><span>Dental Assistants</span><b class="g100">2 min</b></div>
+      <div class="d"><span>Doctors / Coordinators</span><b class="g100">2 min</b></div>
+      <div class="d"><span>The A Team</span><b class="g100">2 min</b></div>
+    </div>
+    <p class="foot-note">Wins, what's working, what needs help, the usual monthly snapshot from each department.</p>
+  </section>
+
+    <!-- 6b · CHECK-IN RANKING (new) -->
+  <section class="slide">
+    <div class="kicker">Team check-in · October round</div>
+    <h2>What the team told us, highest to lowest</h2>
+    <p class="sub" id="rankCounts" style="margin-top:.6rem;font-size:clamp(.9rem,1.5vw,1.1rem)"></p>
+    <div id="rankRows" style="width:100%;max-width:1060px;margin-top:1.1rem"></div>
+    <div id="rankThemes" style="display:none;width:100%;max-width:1060px;margin-top:.8rem;text-align:left"></div>
+    <div id="rankStatus" style="margin-top:.8rem;font-size:.9rem;font-weight:600;color:var(--muted)"></div>
+    <p class="foot-note">Scale 1 to 5, average of the team's own answers. Small sample, so read it as a direction, not a verdict. Team picture only.</p>
+  </section>
+
+  <!-- 6c · ASSUMPTION JUNCTION: opening question -->
+  <section class="slide dark">
+    <div class="kicker">Trust &amp; assumptions · 10 minutes</div>
+    <h2>Ask first.</h2>
+    <p class="sub" style="max-width:48ch">Think of a time this month you were sure you knew why someone did something, and later found out you were wrong.</p>
+    <span class="pill">Quick show of hands. No stories required.</span>
+    <p class="foot-note" style="color:#b9c4d2">Trust breaks when we fill a gap with an assumption instead of a question.</p>
+  </section>
+
+  <!-- 6d · ASSUMPTION JUNCTION: three places -->
+  <section class="slide">
+    <div class="kicker">Trust &amp; assumptions</div>
+    <h2>Three places assumptions hide</h2>
+    <div class="rhythm" style="margin-top:1.6rem;align-items:stretch">
+      <div style="max-width:300px;text-align:left"><div class="w a">In our thoughts</div><small style="font-size:.95rem;line-height:1.4">“She is late again, she does not care.” We decide the reason before we know it.</small></div>
+      <div style="max-width:300px;text-align:left"><div class="w s">In our words</div><small style="font-size:.95rem;line-height:1.4">“Everyone knows the new patient flow.” We skip saying it because it feels obvious.</small></div>
+      <div style="max-width:300px;text-align:left"><div class="w k">In our actions</div><small style="font-size:.95rem;line-height:1.4">We reschedule, skip a step, or cover for someone without asking, and it lands wrong.</small></div>
+    </div>
+    <p class="foot-note">About habits, not people. Optional: a 60-second story of assuming the worst about someone, then learning to ask.</p>
+  </section>
+
+  <!-- 6e · ASSUMPTION JUNCTION: ASK practice -->
+  <section class="slide">
+    <div class="kicker">Trust &amp; assumptions</div>
+    <h2>The ASK practice</h2>
+    <ol class="steps" style="max-width:52ch;margin-top:1.4rem">
+      <li><b>Pause.</b> Notice the story you are telling yourself.</li>
+      <li><b>Ask.</b> “Help me understand what happened.” or “What did you need from me?”</li>
+      <li><b>Check.</b> Say back what you heard before you respond.</li>
+    </ol>
+    <span class="pill">Pairs, 90 seconds: one describes a small, real work moment, the other only asks and checks.</span>
+  </section>
+
+  <!-- 6f · ASSUMPTION JUNCTION: team agreement -->
+  <section class="slide dark">
+    <div class="kicker">Trust &amp; assumptions</div>
+    <h2>Our team agreement, next 30 days</h2>
+    <ol class="steps" style="max-width:52ch;margin-top:1.4rem">
+      <li><b>Ask before assuming.</b></li>
+      <li><b>Say the obvious out loud.</b></li>
+      <li><b>Check back before acting.</b></li>
+    </ol>
+    <p class="sub" style="max-width:56ch">The monthly check-in is where we say what is true, not what we think others want to hear.</p>
+    <span class="pill">What is one assumption you will drop this week?</span>
+  </section>
+
+    <!-- 9 · LAST MONTH NUMBERS -->
+  <section class="slide">
+    <div class="kicker" id="kickerLastMonth">Last month · September 2026 · KEEP</div>
+    <h2>Our team scoreboard</h2>
+    <div class="board" style="grid-template-columns:repeat(4,1fr);max-width:1120px">
+      <div class="kpi warn"><div class="n" id="kpiCollVal">$203.7K</div><div class="l">Collections</div><div class="g mid" id="kpiCollGoal">86% of $238K goal</div></div>
+      <div class="kpi" id="kpiRateCard"><div class="n" id="kpiRateVal">n/a</div><div class="l">Collection rate</div><div class="g mid" id="kpiRateGoal">not in yet</div></div>
+      <div class="kpi win" id="kpiNPCard"><div class="n" id="kpiNPVal">n/a</div><div class="l">New patients</div><div class="g up" id="kpiNPGoal">not in yet</div></div>
+      <div class="kpi" id="kpiAddOnCard"><div class="n" id="kpiAddOnVal">n/a</div><div class="l">Add-on services</div><div class="g mid" id="kpiAddOnGoal">not in yet</div></div>
+      <div class="kpi warn" id="kpiOnTimeCard"><div class="n" id="kpiOnTimeVal">n/a</div><div class="l">On-time</div><div class="g mid" id="kpiOnTimeGoal">not in yet</div></div>
+      <div class="kpi" id="kpiProdCard"><div class="n" id="kpiProdVal">n/a</div><div class="l">Gross production</div><div class="g mid" id="kpiProdGoal">n/a</div></div>
+      <div class="kpi" id="kpiRefCard"><div class="n" id="kpiRefVal">n/a</div><div class="l">Referrals</div><div class="g mid" id="kpiRefGoal">n/a</div></div>
+      <div class="kpi" id="kpiTxAccCard"><div class="n" id="kpiTxAccVal">n/a</div><div class="l">Treatment acceptance</div><div class="g mid" id="kpiTxAccGoal">not in yet</div></div>
+    </div>
+    <div class="barchart" id="deptOnTimeChart">
+      <div class="bc-title">On-time by department <span style="color:var(--muted);font-weight:600">· vertical line = 98% goal</span></div>
+      <div class="bc-row"><span class="bc-lab">Front Office</span><span class="bc-track"><i class="bc-fill" style="width:100%"></i><span class="bc-goal" style="left:98%"></span></span><span class="bc-val g100">100%</span></div>
+      <div class="bc-row"><span class="bc-lab">Dental Assistants</span><span class="bc-track"><i class="bc-fill" style="width:98%"></i><span class="bc-goal" style="left:98%"></span></span><span class="bc-val g100">98%</span></div>
+      <div class="bc-row"><span class="bc-lab">Hygienists</span><span class="bc-track"><i class="bc-fill" style="width:97%"></i><span class="bc-goal" style="left:98%"></span></span><span class="bc-val g90">97%</span></div>
+      <div class="bc-row"><span class="bc-lab">Key Leaders</span><span class="bc-track"><i class="bc-fill low" style="width:76%"></i><span class="bc-goal" style="left:98%"></span></span><span class="bc-val g70">76%</span></div>
+    </div>
+    <p class="foot-note" id="scoreboardFootnote">New patients 110 (base goal 111 · high 119). On-time goal 98%. Collections figures reconciled to the practice collections ledger 08/12.</p>
+  </section>
+
+  <!-- 9-ADD · ADD-ON SERVICES -->
+  <section class="slide">
+    <div class="kicker">Add-on services · September 2026</div>
+    <h2>Add-ons: what we added on</h2>
+    <div class="board" style="grid-template-columns:repeat(2,1fr);max-width:680px">
+      <div class="kpi win"><div class="n">$3,870</div><div class="l">Curodont</div></div>
+      <div class="kpi win"><div class="n">$2,163</div><div class="l">Arestin</div></div>
+    </div>
+    <p class="foot-note">Add-on total so far $6,033 (two services). Goal for add-ons is not set yet, see the goals slide.</p>
+  </section>
+
+    <!-- 9a · SIMPLE MONTHLY BREAKDOWN -->
+  <section class="slide">
+    <div class="kicker" id="kickerBreakdown">Where the money came from · September 2026 · KEEP</div>
+    <h2>The month, three simple buckets</h2>
+    <div class="barchart" style="max-width:760px">
+      <div class="bc-row"><span class="bc-lab">Doctor collections</span><span class="bc-track"><i class="bc-fill" id="bcDoctorFill" style="width:0%;background:var(--navy-2)"></i></span><span class="bc-val" id="bcDoctorVal">n/a</span></div>
+      <div class="bc-row"><span class="bc-lab">Hygiene collections</span><span class="bc-track"><i class="bc-fill" id="bcHygieneFill" style="width:0%"></i></span><span class="bc-val" id="bcHygieneVal">n/a</span></div>
+      <div class="bc-row"><span class="bc-lab">Everything else <span class="tbd">to confirm</span></span><span class="bc-track"><i class="bc-fill" id="bcOtherFill" style="width:0%;background:var(--gold)"></i></span><span class="bc-val" id="bcOtherVal">n/a</span></div>
+    </div>
+    <div class="board" style="grid-template-columns:1fr;max-width:400px">
+      <div class="kpi win"><div class="n" id="bcTotalVal">n/a</div><div class="l">Total collected</div><div class="g mid" id="bcTotalGoal">n/a of goal</div></div>
+    </div>
+    <p class="foot-note" id="bcNote">Doctor + Hygiene + Everything else (old outstanding balances still being paid down, plus small misc items) always add up to the practice total.</p>
+  </section>
+
+  <!-- 9b · TRENDS -->
+  <section class="slide">
+    <div class="kicker" id="kickerTrends">Trends · Jan to Sep 2026 · KEEP</div>
+    <h2>Where we're trending</h2>
+    <div class="sidebyside" style="align-items:flex-start;gap:clamp(1.5rem,4vw,3rem);max-width:1040px">
+      <div style="flex:1;min-width:320px"><div class="chart-t">Collections / month</div><div id="chartColl"></div></div>
+      <div style="flex:1;min-width:320px"><div class="chart-t">New patients / month</div><div id="chartNP"></div></div>
+    </div>
+    <p class="foot-note" id="trendsNote">Source: practice collections ledger, Jan to Jul 2026 (reconciled 08/12). Dashed line = goal. YTD $1.58M collected · $225.5K/mo average vs the $238K goal.</p>
+  </section>
+
+  <!-- 9c · BY PROVIDER -->
+  <section class="slide">
+    <div class="kicker">By provider · September 2026</div>
+    <h2>How each provider's tracking</h2>
+    <div class="sidebyside" id="provCards" style="align-items:stretch; gap:clamp(.8rem,1.6vw,1.4rem); max-width:1240px; flex-wrap:nowrap"></div>
+    <div class="confirm" id="provConfirm"></div>
+    <p class="foot-note" id="provNote"></p>
+  </section>
+
+  <!-- 9d · ANNUAL THERMOMETER -->
+  <section class="slide dark">
+    <div class="kicker">Year to goal · 2026 · KEEP</div>
+    <h2 id="thermoHeadline">Our climb to the annual goal</h2>
+    <div class="sidebyside" style="align-items:center;gap:clamp(2rem,5vw,4rem)">
+      <div style="display:flex;flex-direction:column;align-items:center">
+        <div style="width:72px;height:320px;border:3px solid #fff;border-radius:36px;position:relative;overflow:hidden;background:linear-gradient(180deg, var(--green) 0%, var(--gold) 55%, var(--red) 100%)">
+          <div id="thermoFill" style="position:absolute;left:0;right:0;top:0;height:100%;background:var(--navy)"></div>
+        </div>
+        <div class="pill" style="margin-top:1rem" id="thermoPct">n/a</div>
+      </div>
+      <div style="text-align:left;max-width:38ch">
+        <div style="font-size:.78rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)">Year to date</div>
+        <div style="font-size:clamp(1.6rem,3.4vw,2.4rem);font-weight:800;color:#fff;margin-top:.3rem" id="thermoActual">n/a</div>
+        <div style="font-size:.78rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-top:1.3rem">Annual goal</div>
+        <div style="font-size:clamp(1.6rem,3.4vw,2.4rem);font-weight:800;color:#fff;margin-top:.3rem" id="thermoTarget">TBD</div>
+        <p class="sub" style="margin-top:1.2rem" id="thermoPrize">Hit the annual goal, the team earns a cruise. 🚢</p>
+      </div>
+    </div>
+    <p class="foot-note" style="color:#b9c4d2" id="thermoNote"></p>
+  </section>
+
+  <!-- 10 · GOALS AHEAD -->
+  <section class="slide">
+    <div class="kicker">The months ahead · SHIFT</div>
+    <h2>What we're aiming at</h2>
+    <div class="board">
+      <div class="kpi warn"><div class="n">$90K</div><div class="l">Hygiene production · $75K base</div></div>
+      <div class="kpi warn"><div class="n">119</div><div class="l">New patients / mo · 111 base</div></div>
+      <div class="kpi warn"><div class="n">98%</div><div class="l">On-time</div></div>
+      <div class="kpi warn"><div class="n">$238K</div><div class="l">Collections / mo</div></div>
+      <div class="kpi warn"><div class="n">$190K</div><div class="l">Dentist production</div></div>
+      <span id="goalsExtra" style="display:contents"></span>
+    </div>
+    <p class="sub" style="margin-top:1.2rem">Consistency is how we get there. The SOPs we tighten this quarter show up right here next month.</p>
+  </section>
+
+  <!-- 13 · HUDDLE DASHBOARD PREVIEW (coming soon, sample screen) -->
+  <section class="slide dark">
+    <div class="kicker">Coming soon</div>
+    <h2>Your morning huddle, on the screen</h2>
+    <p class="sub" style="max-width:56ch">One quick form each morning, and the huddle dashboard is ready when you walk in: today's numbers, the schedule, everything the team needs to start the day.</p>
+    <div style="margin-top:1.6rem;position:relative;display:inline-block">
+      <span class="prev-label">Sample data</span>
+      <img class="shot big" src="assets/huddle-sample.jpg" alt="Morning Huddle dashboard: Know · Align (ASK reminders, product of the week, clinical moment), Do · Shift (per-provider goal progress, gaps, new patients), Measure · Keep (weekly production trend, annual goal)">
+    </div>
+    <p class="sub" style="margin-top:1.4rem">Lives on your phone, one form, someone enters the numbers, the schedule photo gets uploaded, tap to view. Goals are already set, no guessing.</p>
+    <span class="pill">A sample screen, not final, tell us what you'd want on it</span>
+  </section>
+
+</div>
+
+<img class="logo-sm" src="assets/ask-logo-color.png" alt="">
+<div class="nav"><button id="reorderBtn" title="Reorder slides">≡</button><button id="prev">‹</button><button id="next">›</button></div>
+<div class="hint">← → or space · F fullscreen · P print · ≡ reorder</div>
+<div id="reorderPanel" style="display:none;position:fixed;top:0;right:0;width:360px;height:100vh;overflow:auto;background:#fff;border-left:1px solid #e5e8ec;box-shadow:-16px 0 50px rgba(21,34,56,.22);z-index:40;padding:16px;text-align:left">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+    <div style="font-weight:800;font-size:1.05rem;color:#152238">Slides</div>
+    <div style="display:flex;gap:6px;align-items:center">
+      <button id="editToggle" style="border:1px solid #e5e8ec;background:#fff;color:#4d7a2e;font-weight:700;font-size:.72rem;padding:5px 10px;border-radius:6px;cursor:pointer">✎ Edit text</button>
+      <button id="resetOrder" style="border:none;background:#eef1f4;color:#5c6773;font-weight:700;font-size:.72rem;padding:5px 10px;border-radius:6px;cursor:pointer">Reset</button>
+      <button id="closePanel" style="border:none;background:transparent;color:#5c6773;font-size:1.15rem;cursor:pointer;line-height:1">✕</button>
+    </div>
+  </div>
+  <div style="font-size:.7rem;color:#8a97a6;margin-bottom:10px">Drag ⋮⋮ or ▲▼ to reorder · click a card to jump · order &amp; edits are saved. <b>Edit text</b> lets you type right on the slide.</div>
+  <ol id="reorderList" style="list-style:none;margin:0;padding:0"></ol>
+</div>
+
+<script>
+  // September 2026 data model (inline so the deck works from file:// and in print)
+  window.AFD_DATA = {
+ "meetingDate": "2026-10-05",
+ "reportingMonthLabel": "September 2026",
+ "reportingMonthKey": "2026-09",
+ "collections": {
+  "doctor": 160413.14,
+  "hygiene": 60547.34,
+  "other": 3665.04,
+  "total": 224625.52,
+  "monthlyGoal": 238000,
+  "otherNote": "TO CONFIRM. This is the gap between the stored September collections total ($224,625.52) and the five providers' collections added up ($220,960.48). Its source is not yet confirmed."
+ },
+ "ytdTrend": {
+  "months": [
+   "Jan",
+   "Feb",
+   "Mar",
+   "Apr",
+   "May",
+   "Jun",
+   "Jul",
+   "Aug",
+   "Sep"
+  ],
+  "collections": [
+   214094,
+   224844,
+   268370,
+   222761,
+   240512,
+   204277,
+   203692,
+   234224,
+   224626
+  ],
+  "newPatients": [
+   87,
+   86,
+   109,
+   116,
+   86,
+   98,
+   110,
+   86,
+   76
+  ],
+  "monthlyGoal": 238000
+ },
+ "trendsNote": "Source: practice collections ledger Jan to Aug, September from the Monthly Numbers form. Dashed line = goal. New patients: Jan to Jul from the prior deck, Aug 86, Sep 76.",
+ "annualGoal": {
+  "target": 2856000,
+  "ytdActual": 2037399.79,
+  "prize": "Team cruise",
+  "note": "Annual goal = $238K monthly goal x 12."
+ },
+ "collectionRate": 86,
+ "addOnTotal": 6033,
+ "treatmentAcceptanceText": "55% / 57%",
+ "treatmentAcceptanceNote": "Dr. Mitchell / Dr. Yassa",
+ "production": {
+  "gross": 260744.45,
+  "adjusted": 237983.25
+ },
+ "referrals": 11,
+ "notFilledYet": {
+  "newPatients": 76,
+  "newPatientsGoalText": "base goal 111 · high 119",
+  "onTimeRate": 94,
+  "note": "On-time is from the September time cards."
+ },
+ "scoreboardNote": "Add-ons: Curodont $3,870 and Arestin $2,163. Collection rate = collections / gross production. Provider-level figures are marked to confirm. On-time: late means a first punch of the day after 8:10 AM (expected arrival 7:50 AM). 172 of 183 worked days on time, from the September time cards. One part-time team member is not counted. Vacation days taken: 11.",
+ "providers": [
+  {
+   "name": "Dr. Mitchell",
+   "production": 108492.0,
+   "adjusted": 92459.3,
+   "collections": 94070.69,
+   "txAcceptance": 55
+  },
+  {
+   "name": "Dr. Yassa",
+   "production": 76181.0,
+   "adjusted": 68046.5,
+   "collections": 66342.45,
+   "txAcceptance": 57
+  },
+  {
+   "name": "Tay",
+   "role": "hygiene",
+   "goal": null,
+   "production": 25868.45,
+   "adjusted": 24157.45,
+   "collections": 21483.68
+  },
+  {
+   "name": "Marian",
+   "role": "hygiene",
+   "goal": null,
+   "production": 21172.0,
+   "adjusted": 20367.0,
+   "collections": 15794.03
+  },
+  {
+   "name": "Arika",
+   "role": "hygiene",
+   "goal": null,
+   "production": 29031.0,
+   "adjusted": 32953.0,
+   "collections": 23269.63
+  }
+ ],
+ "vacationDays": 11,
+ "goals": {"addOn": null, "hygieneByPerson": null},
+ "collectionsGapAnswer": null,
+ "adjustedAboveGrossAnswer": null,
+ "providerConfirm": "At the time of reporting, provider collections total $220,960.48 against reported collections of $224,625.52; the $3,665.04 difference is being reconciled with the office. Provider production adds up exactly ($260,744.45). One provider's adjusted production is higher than gross production, which is also being confirmed.",
+ "providerNote": "Source: September Monthly Numbers form and the final September spreadsheet. Treatment acceptance is the form entry (Dr. M 55%, Dr. Y 57%)."
+};
+  // Check-in ranking: set each statement's avg (1 to 5) to rank automatically. Aggregates only.
+  window.AFD_CHECKIN_RANKING = {
+ "n": 5,
+ "of": 17,
+ "managerDone": 0,
+ "themes": [],
+ "statements": [
+  {
+   "tag": "How I showed up",
+   "text": "I brought my best this month: caring, curious, coachable, and I can point to real moments.",
+   "avg": 4.8
+  },
+  {
+   "tag": "What I did with feedback",
+   "text": "The last feedback I got, I did something about it within the week.",
+   "avg": 4.8
+  },
+  {
+   "tag": "My wins",
+   "text": "I know what a good week looks like in my job, and I'm having them.",
+   "avg": 4.4
+  },
+  {
+   "tag": "The people leading",
+   "text": "The people running this place live the same values they ask of me.",
+   "avg": 4.2
+  },
+  {
+   "tag": "Being heard",
+   "text": "When I raise a problem, something actually happens.",
+   "avg": 3.8
+  },
+  {
+   "tag": "Staying",
+   "text": "I can see myself here a year from now.",
+   "avg": 4.4
+  }
+ ]
+};
+</script>
+<script>
+  let slides=[...document.querySelectorAll('.slide')];
+  slides.forEach((s,idx)=>s.dataset.sid=String(idx));
+  try{
+    const saved=JSON.parse(localStorage.getItem('afd10_deck_order')||'null');
+    if(saved&&saved.length===slides.length){
+      const stage=document.querySelector('.stage'), by={};
+      slides.forEach(s=>by[s.dataset.sid]=s);
+      if(saved.every(sid=>by[sid])){saved.forEach(sid=>stage.appendChild(by[sid])); slides=[...document.querySelectorAll('.slide')];}
+    }
+  }catch(e){}
+  const EDIT_SEL='.kicker,h1,h2,.sub,.foot-note,.steps li,.bigquote,.pill,.qcap,.provname,.n,.l,.g,.bc-lab,.bc-val,.cl,.prow span,.provrow span,.provrow b';
+  function tagEditable(){ slides.forEach(s=>{ let n=0; s.querySelectorAll(EDIT_SEL).forEach(el=>{ if(el.dataset.eid===undefined) el.dataset.eid=String(n++); }); }); }
+  function restoreEdits(){ slides.forEach(s=>{ s.querySelectorAll('[data-eid]').forEach(el=>{ try{ const v=localStorage.getItem('afd10_txt_'+s.dataset.sid+'_'+el.dataset.eid); if(v!=null) el.innerHTML=v; }catch(_){} }); }); }
+  let editMode=false;
+  function setEdit(on){ editMode=on; slides.forEach(s=>s.querySelectorAll('[data-eid]').forEach(el=>{ el.contentEditable=on?'true':'false'; el.style.outline=on?'1px dashed rgba(230,132,42,.6)':''; el.style.outlineOffset=on?'3px':''; el.style.cursor=on?'text':''; })); const b=document.getElementById('editToggle'); if(b){ b.textContent=on?'✓ Editing':'✎ Edit text'; b.style.background=on?'#e6842a':'#fff'; b.style.color=on?'#fff':'#4d7a2e'; b.style.borderColor=on?'#e6842a':'#e5e8ec'; } }
+  document.addEventListener('input',e=>{ const el=e.target.closest&&e.target.closest('[data-eid]'); if(!el||!editMode) return; const s=el.closest('.slide'); if(!s) return; try{ localStorage.setItem('afd10_txt_'+s.dataset.sid+'_'+el.dataset.eid, el.innerHTML); }catch(_){} });
+  tagEditable(); restoreEdits();
+  const bar=document.getElementById('bar'), count=document.getElementById('count');
+  let i=0;
+  function show(n){
+    i=Math.max(0,Math.min(slides.length-1,n));
+    slides.forEach((s,x)=>s.classList.toggle('active',x===i));
+    bar.style.width=((i+1)/slides.length*100)+'%';
+    count.textContent=(i+1)+' / '+slides.length;
+    count.style.color=slides[i].classList.contains('dark')?'#fff':'';
+  }
+  document.getElementById('next').onclick=()=>show(i+1);
+  document.getElementById('prev').onclick=()=>show(i-1);
+  document.addEventListener('keydown',e=>{
+    if(document.activeElement&&document.activeElement.isContentEditable) return;
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){show(i+1);e.preventDefault();}
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){show(i-1);}
+    else if(e.key==='Home'){show(0);} else if(e.key==='End'){show(slides.length-1);}
+    else if(e.key==='f'||e.key==='F'){document.documentElement.requestFullscreen?.();}
+    else if(e.key==='p'||e.key==='P'){window.print();}
+  });
+  // ---- reorder tool ----
+  function slideLabel(s){
+    const k=(s.querySelector('.kicker')?.textContent||'').trim().split('·')[0].trim();
+    const h=(s.querySelector('h1,h2')?.textContent||'').trim().replace(/\s+/g,' ');
+    return (k?k+' · ':'')+h;
+  }
+  let dragSrc=null;
+  function buildReorder(){
+    const list=document.getElementById('reorderList'); list.innerHTML='';
+    slides.forEach((s,idx)=>{
+      const li=document.createElement('li');
+      li.draggable=true;
+      const activeNow=(idx===i);
+      li.style.cssText='display:flex;align-items:center;gap:8px;padding:10px 10px;margin:6px 0;border:1px solid '+(activeNow?'#6a9f3f':'#e5e8ec')+';border-radius:8px;background:'+(activeNow?'#f2f7ec':'#fff')+';box-shadow:0 2px 8px rgba(21,34,56,.05);font-size:.78rem;color:#1d2530;cursor:grab';
+      li.innerHTML='<span style="opacity:.35;font-size:.95rem">⋮⋮</span><b style="color:#6a9f3f;min-width:20px;font-size:.9rem">'+(idx+1)+'</b>'
+        +'<span class="rl-label" style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600;cursor:pointer">'+slideLabel(s)+'</span>'
+        +'<span style="display:flex;flex-direction:column;gap:2px"><button data-mv="-1" style="border:none;background:#eef1f4;cursor:pointer;border-radius:3px;width:24px;line-height:1.1;padding:1px 0">▲</button>'
+        +'<button data-mv="1" style="border:none;background:#eef1f4;cursor:pointer;border-radius:3px;width:24px;line-height:1.1;padding:1px 0">▼</button></span>';
+      li.querySelector('.rl-label').onclick=()=>show(idx);
+      li.querySelectorAll('button[data-mv]').forEach(b=>b.onclick=e=>{e.stopPropagation();moveTo(idx,idx+parseInt(b.dataset.mv));});
+      li.addEventListener('dragstart',()=>{dragSrc=idx;li.style.opacity='.4';});
+      li.addEventListener('dragend',()=>{li.style.opacity='1';});
+      li.addEventListener('dragover',e=>e.preventDefault());
+      li.addEventListener('drop',e=>{e.preventDefault(); if(dragSrc!=null&&dragSrc!==idx) moveTo(dragSrc,idx);});
+      list.appendChild(li);
+    });
+  }
+  function moveTo(from,to){
+    if(to<0||to>=slides.length||from===to)return;
+    const arr=slides.slice(); const m=arr.splice(from,1)[0]; arr.splice(to,0,m);
+    const stage=document.querySelector('.stage'); arr.forEach(s=>stage.appendChild(s));
+    slides=[...document.querySelectorAll('.slide')];
+    try{localStorage.setItem('afd10_deck_order',JSON.stringify(slides.map(s=>s.dataset.sid)));}catch(e){}
+    buildReorder(); show(arr.indexOf(m));
+  }
+  document.getElementById('reorderBtn').onclick=()=>{
+    const p=document.getElementById('reorderPanel');
+    if(p.style.display==='block'){p.style.display='none';} else {buildReorder();p.style.display='block';}
+  };
+  document.getElementById('closePanel').onclick=()=>{document.getElementById('reorderPanel').style.display='none';};
+  document.getElementById('editToggle').onclick=()=>setEdit(!editMode);
+  document.getElementById('resetOrder').onclick=()=>{ try{ localStorage.removeItem('afd10_deck_order'); Object.keys(localStorage).filter(k=>k.indexOf('afd10_txt_')===0).forEach(k=>localStorage.removeItem(k)); }catch(e){} location.reload(); };
+  function drawLine(el,data,labels,o){ if(!el)return; o=o||{}; const W=560,H=250,pl=56,pr=18,pt=26,pb=34; const pw=W-pl-pr,ph=H-pt-pb,mn=o.min,mx=o.max; const X=i=>pl+(data.length>1?i*(pw/(data.length-1)):0); const Y=v=>pt+(1-(v-mn)/(mx-mn))*ph; let s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;overflow:visible">'; for(let g=0;g<=3;g++){const gy=pt+g*ph/3,gv=mx-g*(mx-mn)/3; s+='<line x1="'+pl+'" y1="'+gy+'" x2="'+(W-pr)+'" y2="'+gy+'" stroke="#eef1f4"/><text x="'+(pl-8)+'" y="'+(gy+4)+'" text-anchor="end" font-size="11" fill="#8a97a6">'+(o.fa?o.fa(gv):Math.round(gv))+'</text>';} if(o.goal!=null){const gy=Y(o.goal); s+='<line x1="'+pl+'" y1="'+gy+'" x2="'+(W-pr)+'" y2="'+gy+'" stroke="#d9a441" stroke-dasharray="5 4" stroke-width="2"/><text x="'+(W-pr)+'" y="'+(gy-5)+'" text-anchor="end" font-size="10" font-weight="700" fill="#b9832a">goal '+(o.fv?o.fv(o.goal):o.goal)+'</text>';} s+='<polyline points="'+data.map((v,i)=>X(i)+','+Y(v)).join(' ')+'" fill="none" stroke="'+o.color+'" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>'; data.forEach((v,i)=>{s+='<circle cx="'+X(i)+'" cy="'+Y(v)+'" r="4" fill="'+o.color+'"/><text x="'+X(i)+'" y="'+(Y(v)-11)+'" text-anchor="middle" font-size="11" font-weight="700" fill="#152238">'+(o.fv?o.fv(v):v)+'</text><text x="'+X(i)+'" y="'+(H-10)+'" text-anchor="middle" font-size="11" fill="#8a97a6">'+labels[i]+'</text>';}); s+='</svg>'; el.innerHTML=s; }
+  // ---- live monthly data (reads data/<meeting-date>.json, edit that file and reload to update every slide) ----
+  function money0(v){ return '$'+Math.round(v).toLocaleString('en-US'); }
+  function moneyK(v){ return '$'+Math.round(v/1000)+'K'; }
+  async function loadMonthlyData(){
+    let d;
+    d = window.AFD_DATA;
+
+    const NP_FALLBACK = d.ytdTrend?.newPatients || [87,86,109,116,86,98,110];
+
+    // trend charts (Collections is fully live; New Patients stays on the historical fallback until an August figure exists)
+    const months = d.ytdTrend?.months || ['Jan','Feb','Mar','Apr','May','Jun','Jul'];
+    const collSeries = d.ytdTrend?.collections || [214094,224844,268370,222761,240512,204277,203692];
+    const goal = d.ytdTrend?.monthlyGoal || d.collections?.monthlyGoal || 238000;
+    drawLine(document.getElementById('chartColl'), collSeries, months, {min:Math.min(...collSeries,goal)-15000, max:Math.max(...collSeries,goal)+15000, color:'#6a9f3f', goal, fa:moneyK, fv:moneyK});
+    drawLine(document.getElementById('chartNP'), NP_FALLBACK, months.slice(0,NP_FALLBACK.length), {min:70,max:125,color:'#3a9fd4',goal:111,fa:v=>Math.round(v),fv:v=>v});
+    const trendsNote = document.getElementById('trendsNote');
+    if(trendsNote) trendsNote.textContent = d.trendsNote || ('Source: practice collections ledger, Jan to '+months[months.length-1]+' 2026. Dashed line = goal.');
+    const kickerTrends = document.getElementById('kickerTrends');
+    if(kickerTrends) kickerTrends.textContent = 'Trends · Jan to '+months[months.length-1]+' 2026 · KEEP';
+
+    // last-month KPI board
+    const c = d.collections;
+    if(c){
+      const pct = Math.round(c.total/c.monthlyGoal*100);
+      const collVal = document.getElementById('kpiCollVal'); if(collVal) collVal.textContent = moneyK(c.total);
+      const collGoal = document.getElementById('kpiCollGoal'); if(collGoal) collGoal.textContent = pct+'% of '+moneyK(c.monthlyGoal)+' goal';
+      const kickerLM = document.getElementById('kickerLastMonth'); if(kickerLM) kickerLM.textContent = 'Last month · '+d.reportingMonthLabel+' · KEEP';
+
+      // doctor / hygiene / everything-else breakdown
+      const maxBucket = Math.max(c.doctor, c.hygiene, c.other);
+      const setBar = (fillId, valId, amount) => {
+        const fill = document.getElementById(fillId), val = document.getElementById(valId);
+        if(fill) fill.style.width = Math.round(amount/maxBucket*100)+'%';
+        if(val) val.textContent = money0(amount);
+      };
+      setBar('bcDoctorFill','bcDoctorVal', c.doctor);
+      setBar('bcHygieneFill','bcHygieneVal', c.hygiene);
+      setBar('bcOtherFill','bcOtherVal', c.other);
+      const totalVal = document.getElementById('bcTotalVal'); if(totalVal) totalVal.textContent = money0(c.total);
+      const totalGoal = document.getElementById('bcTotalGoal'); if(totalGoal) totalGoal.textContent = pct+'% of '+moneyK(c.monthlyGoal)+' goal';
+      const kickerBD = document.getElementById('kickerBreakdown'); if(kickerBD) kickerBD.textContent = 'Where the money came from · '+d.reportingMonthLabel+' · KEEP';
+      if(c.otherNote){ const n=document.getElementById('bcNote'); if(n) n.textContent = 'Everything else: '+c.otherNote; }
+    }
+
+    // Glenn's video slide, embed once a real YouTube id/url exists, otherwise keep the placeholder
+    if(d.video && d.video.youtubeId){
+      const frame = document.getElementById('videoFrame');
+      if(frame){
+        frame.innerHTML = '<iframe style="width:100%;height:100%;border:0" src="https://www.youtube-nocookie.com/embed/'+d.video.youtubeId+'" title="A word from Glenn" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+      }
+      if(d.video.note){ const s=document.getElementById('videoSub'); if(s) s.textContent = d.video.note; }
+    }
+
+    // scoreboard tiles that aren't in every month's source reports yet,
+    // show the real figure when present, otherwise say so honestly rather
+    // than leaving last month's real numbers up under this month's label.
+    const nf = d.notFilledYet || {};
+    const setTile = (valId, goalId, value, goalText) => {
+      const v = document.getElementById(valId), g = document.getElementById(goalId);
+      const miss=(value===null||value===undefined); if(v) v.textContent = miss ? '' : value;
+      if(g) g.textContent = miss ? '' : goalText;
+      const card = v && v.closest('.kpi'); if(card) card.style.display = miss ? 'none' : '';
+    };
+    setTile('kpiRateVal','kpiRateGoal', d.collectionRate!=null ? d.collectionRate+'%' : null, 'collected of produced');
+    setTile('kpiNPVal','kpiNPGoal', nf.newPatients, nf.newPatientsGoalText || 'of goal');
+    setTile('kpiAddOnVal','kpiAddOnGoal', d.addOnTotal!=null ? moneyK(d.addOnTotal) : null, 'no set goal yet');
+    setTile('kpiOnTimeVal','kpiOnTimeGoal', nf.onTimeRate!=null ? nf.onTimeRate+'%' : null, 'goal 98%');
+    setTile('kpiTxAccVal','kpiTxAccGoal', d.treatmentAcceptanceText || (d.treatmentAcceptance!=null ? d.treatmentAcceptance+'%' : null), d.treatmentAcceptanceNote || 'no set goal yet');
+    setTile('kpiProdVal','kpiProdGoal', d.production ? moneyK(d.production.gross) : null, d.production ? 'adjusted '+moneyK(d.production.adjusted) : '');
+    setTile('kpiRefVal','kpiRefGoal', d.referrals!=null ? d.referrals : null, 'new patient referrals');
+
+    const deptChart = document.getElementById('deptOnTimeChart');
+    if(deptChart){ if(d.deptOnTime){ const cls=p=>p>=98?'g100':(p>=90?'g90':'g70'); deptChart.innerHTML='<div class="bc-title">On-time by department <span style="color:var(--muted);font-weight:600">· vertical line = 98% goal</span></div>'+d.deptOnTime.map(x=>'<div class="bc-row"><span class="bc-lab">'+x.name+'</span><span class="bc-track"><i class="bc-fill'+(x.pct<90?' low':'')+'" style="width:'+x.pct+'%"></i><span class="bc-goal" style="left:98%"></span></span><span class="bc-val '+cls(x.pct)+'">'+x.pct+'%</span></div>').join(''); } else { deptChart.style.display='none'; } }
+
+    const scoreFoot = document.getElementById('scoreboardFootnote');
+    if(scoreFoot){
+      scoreFoot.textContent = d.scoreboardNote ? d.scoreboardNote : (nf.newPatients==null && d.addOnTotal==null && nf.onTimeRate==null)
+        ? 'Collection rate, new patients, add-on services, and on-time aren\'t in this month\'s source reports yet.' + (nf.note ? ' ' + nf.note : '')
+        : 'Collections figures reconciled to the practice collections ledger.';
+    }
+
+    // annual thermometer
+    const ag = d.annualGoal;
+    if(ag){
+      const actualEl = document.getElementById('thermoActual'); if(actualEl) actualEl.textContent = money0(ag.ytdActual);
+      const targetEl = document.getElementById('thermoTarget');
+      const pctEl = document.getElementById('thermoPct');
+      const fillEl = document.getElementById('thermoFill');
+      const noteEl = document.getElementById('thermoNote');
+      if(ag.target){
+        const pct = Math.min(100, Math.round(ag.ytdActual/ag.target*100));
+        const monthsReported = (d.ytdTrend?.months||[]).length || 8;
+        const pctYear = Math.round(monthsReported/12*100);
+        const gap = Math.max(0, ag.target - ag.ytdActual);
+        const monthsLeft = Math.max(1, 12-monthsReported);
+        const neededPerMonth = gap/monthsLeft;
+        if(targetEl) targetEl.textContent = money0(ag.target);
+        if(pctEl) pctEl.textContent = pct+'%';
+        if(fillEl) fillEl.style.height = (100-pct)+'%';
+        if(noteEl) noteEl.textContent = `We're ${pct}% to the annual goal and ${pctYear}% through the year. Our gap is ${money0(gap)}, about ${money0(neededPerMonth)}/month the rest of the year closes it. We just have to keep working on hitting goal, every month, together.`;
+      } else {
+        if(targetEl) targetEl.textContent = 'TBD';
+        if(pctEl) pctEl.textContent = 'n/a';
+        if(fillEl) fillEl.style.height = '100%';
+        if(noteEl) noteEl.textContent = ag.note || 'Annual goal not set yet.';
+      }
+      const prizeEl = document.getElementById('thermoPrize');
+      if(prizeEl && ag.prize) prizeEl.textContent = 'Hit the annual goal, the team earns a '+ag.prize.toLowerCase()+'. 🚢';
+    }
+  }
+  function renderProviders(){
+    const d=window.AFD_DATA, host=document.getElementById('provCards'); if(!host||!d.providers) return;
+    const m=v=>v==null?'':money0(v);
+    const row=(l,v,cls)=>v==null?'':'<div class="provrow"><span>'+l+'</span><b'+(cls?' class="'+cls+'"':'')+'>'+v+'</b></div>';
+    host.innerHTML=d.providers.map(p=>{
+      let h='<div class="provcard sm"><div class="provname">'+p.name+'</div>'
+        +row('Production',p.production!=null?m(p.production):null)+row('Adjusted',p.adjusted!=null?m(p.adjusted):null);
+      if(p.role==='hygiene'){
+        if(p.goal!=null){
+          h+=row('Goal',m(p.goal))+row('Collected',m(p.collections));
+          const dl=p.collections-p.goal, up=dl>=0;
+          h+='<div class="provrow" style="border-top:2px solid var(--navy);margin-top:.2rem"><span>'+(up?'Over goal':'Short of goal')+'</span><b style="color:'+(up?'var(--green-d)':'var(--red)')+'">'+(up?'+':'-')+money0(Math.abs(dl))+'</b></div>';
+        } else h+=row('Collections',p.collections!=null?m(p.collections):null);
+      } else {
+        h+=row('Collections',p.collections!=null?m(p.collections):null)+(p.txAcceptance!=null?row('Tx acceptance',p.txAcceptance+'%'):'');
+      }
+      return h+'</div>';
+    }).join('');
+    const conf=document.getElementById('provConfirm');
+    if(conf){
+      let h='<span class="tbd">to confirm</span> '+d.providerConfirm;
+      if(d.collectionsGapAnswer) h+='<div class="ansline">Collections gap: '+d.collectionsGapAnswer+'</div>';
+      if(d.adjustedAboveGrossAnswer) h+='<div class="ansline">Adjusted above gross: '+d.adjustedAboveGrossAnswer+'</div>';
+      conf.innerHTML=h;
+    }
+    const note=document.getElementById('provNote'); if(note) note.textContent=(d.providerNote||'')+(d.providers.some(p=>p.role==='hygiene'&&p.goal!=null)?' Hygiene: delta = collected minus goal.':'');
+  }
+  function renderGoals(){
+    const d=window.AFD_DATA, host=document.getElementById('goalsExtra'); if(!host||!d.goals) return; let h='';
+    const kpi=(n,l)=>'<div class="kpi warn"><div class="n">'+n+'</div><div class="l">'+l+'</div></div>';
+    if(d.goals.addOn) h+=kpi(d.goals.addOn,'Add-on services');
+    (d.goals.hygieneByPerson||[]).forEach(x=>{ h+=kpi(x.goal,'Hygiene · '+x.name); });
+    host.innerHTML=h;
+  }
+  function renderRanking(){
+    const R=window.AFD_CHECKIN_RANKING, host=document.getElementById('rankRows'); if(!R||!host) return;
+    const have=R.statements.every(x=>typeof x.avg==='number');
+    const rows=R.statements.slice(); if(have) rows.sort((a,b)=>b.avg-a.avg);
+    host.innerHTML=rows.map((x,idx)=>'<div class="rank-row"><div class="rank-n'+(have?'':' pend')+'">'+(have?idx+1:'')+'</div>'
+      +'<div class="rank-lab">'+x.tag+'<small>'+x.text+'</small></div>'
+      +'<div class="rank-track">'+(have?'<i class="rank-fill" style="width:'+(x.avg/5*100)+'%"></i>':'')+'</div>'
+      +'<div class="rank-val">'+(have?x.avg.toFixed(2)+' / 5':'<span class="tbd">Scores to be filled</span>')+'</div></div>').join('');
+    const th=document.getElementById('rankThemes');
+    if(th&&!(R.themes&&R.themes.length)){ th.style.display='none'; }
+    if(th&&R.themes&&R.themes.length){ th.style.display='block'; th.innerHTML='<div style="font-size:.78rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--green-d);margin-bottom:.4rem">Themes in the written answers</div><div class="chips">'+R.themes.map(t=>'<span class="chip on">'+t.theme+(t.count?' ('+t.count+')':'')+'</span>').join('')+'</div>'; }
+    const st=document.getElementById('rankStatus');
+    if(st) st.innerHTML = have ? ('<span class="tbd" style="background:rgba(217,164,65,.2);color:#8a6b1e">'+R.n+' of '+R.of+', directional only</span>')
+      : ('<span class="tbd">n='+R.n+', directional only</span> &nbsp;Scores to be filled.');
+    const cnt=document.getElementById('rankCounts'); if(cnt) cnt.innerHTML='October check-ins in so far: '+R.n+' of '+R.of+' active staff. Aggregates only, no names, no individual scores.';
+  }
+  renderProviders(); renderGoals(); renderRanking();
+  loadMonthlyData();
+  show(0);
+</script>
+</body>
+</html>
